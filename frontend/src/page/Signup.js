@@ -84,7 +84,7 @@ console.log(process.env.REACT_APP_SERVER_DOMIN)
       <div className="m-auto flex w-full max-w-sm flex-col rounded-3xl border border-edge bg-panel p-6">
         {/* <h1 className='text-center text-2xl font-bold'>Crear cuenta</h1> */}
         <div className="w-20 h-20 overflow-hidden rounded-full border border-edge m-auto relative ">
-          <img src={data.image ? data.image :  loginSignupImage} className="w-full h-full" />
+          <img src={data.image ? data.image :  loginSignupImage} className="w-full h-full" alt="Foto de perfil" />
 
           <label htmlFor="profileImage">
             <div className="absolute bottom-0 h-1/3  bg-slate-500 bg-opacity-50 w-full text-center cursor-pointer">
