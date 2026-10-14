@@ -67,30 +67,28 @@ const Newproduct = () => {
       })
     }
     else{
-      toast("Enter required Fields")
+      toast("Completa los campos obligatorios")
     }
     
    
   }
   return (
-    <div className="p-4">
-       <form className='m-auto w-full max-w-md  shadow flex flex-col p-3 bg-white' onSubmit={handleSubmit}>
-        <label htmlFor='name'>Name</label>
-        <input type={"text"}  name="name" className='bg-slate-200 p-1 my-1' onChange={handleOnChange} value={data.name}/>
+    <div className="px-4 py-12">
+       <form className='m-auto flex w-full max-w-md flex-col gap-1 rounded-3xl border border-edge bg-panel p-6' onSubmit={handleSubmit}>
+        <label htmlFor='name'>Nombre</label>
+        <input type={"text"}  name="name" className='field my-1' onChange={handleOnChange} value={data.name}/>
 
-        <label htmlFor='category'>Category</label>
-        <select className='bg-slate-200 p-1 my-1' id='category' name='category' onChange={handleOnChange} value={data.category}>
-          <option value={"other"}>select category</option>
-          <option value={"boots"}>Boots</option>
-          <option value={"sandals"}>Sandals</option>
-          <option value={"lifestyle"}>Lifestyle</option>
+        <label htmlFor='category'>Categoría</label>
+        <select className='field my-1' id='category' name='category' onChange={handleOnChange} value={data.category}>
+          <option value={"other"}>Selecciona categoría</option>
           <option value={"running"}>Running</option>
           <option value={"basketball"}>Basketball</option>
-          <option value={"slippers"}>Slippers</option>
+          <option value={"training"}>Training</option>
+          <option value={"lifestyle"}>Lifestyle</option>
         </select>
 
-        <label htmlFor='image'>Image
-        <div  className='h-40 w-full bg-slate-200  rounded flex items-center justify-center cursor-pointer'>
+        <label htmlFor='image'>Imagen
+        <div  className='my-1 flex h-40 w-full cursor-pointer items-center justify-center rounded-xl border border-dashed border-edge bg-ink text-zinc-500'>
             {
               data.image ? <img src={data.image} className="h-full" /> :<span className='text-5xl'><BsCloudUpload/></span> 
             }
@@ -101,13 +99,13 @@ const Newproduct = () => {
         </label>
         
 
-        <label htmlFor='price' className='my-1'>Price</label>
-        <input type={"text"} className='bg-slate-200 p-1 my-1' name='price' onChange={handleOnChange} value={data.price}/>
+        <label htmlFor='price' className='my-1'>Precio</label>
+        <input type={"text"} className='field my-1' name='price' onChange={handleOnChange} value={data.price}/>
 
-        <label htmlFor='description'>Description</label>
-        <textarea rows={2} value={data.description} className='bg-slate-200 p-1 my-1 resize-none' name='description' onChange={handleOnChange}></textarea>
+        <label htmlFor='description'>Descripción</label>
+        <textarea rows={2} value={data.description} className='field my-1 resize-none' name='description' onChange={handleOnChange}></textarea>
 
-        <button className='bg-red-500 hover:bg-red-600 text-white text-lg font-medium my-2 drop-shadow'>Save</button>
+        <button className='btn-volt mt-3'>Guardar</button>
        </form>
     </div>
   )

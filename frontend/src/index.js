@@ -17,13 +17,15 @@ import Signup from "./page/Signup";
 import { store } from "./redux/index";
 import { Provider } from "react-redux";
 import Cart from "./page/Cart";
+import Category from "./page/Category";
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
-      <Route path="Shoe/:filterby" element={<Shoe />} />
+      <Route path="shoe/category/:category" element={<Category />} />
+      <Route path="shoe/:filterby" element={<Shoe />} />
       <Route path="login" element={<Login />} />
       <Route path="newproduct" element={<Newproduct />} />
       <Route path="signup" element={<Signup />} />
