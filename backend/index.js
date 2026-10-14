@@ -13,9 +13,9 @@ const PORT = process.env.PORT || 8080;
 //mongodb connection
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(process.env.MONGODB_URL, { serverSelectionTimeoutMS: 8000 })
   .then(() => console.log("Connect to Databse"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log("MongoDB connection error:", err.message));
 
 //schema
 const userSchema = mongoose.Schema({
@@ -100,21 +100,31 @@ const productModel = mongoose.model("product",schemaProduct)
 //save product in data 
 //api
 app.post("/uploadProduct",async(req,res)=>{
-    // console.log(req.body)
+  try{
     const data = await productModel(req.body)
-    const datasave = await data.save()
+    await data.save()
     res.send({message : "Upload successfully"})
+  }catch(err){
+    console.log(err.message)
+    res.status(500).send({message : "Database error"})
+  }
 })
 
 //
 app.get("/product",async(req,res)=>{
-  const data = await productModel.find({})
-  res.send(JSON.stringify(data))
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).send({ message: "Database not connected" })
+  }
+  try{
+    const data = await productModel.find({})
+    res.send(JSON.stringify(data))
+  }catch(err){
+    console.log(err.message)
+    res.status(500).send({ message: "Database error" })
+  }
 })
  
 /*****payment getWay */
-console.log(process.env.STRIPE_SECRET_KEY)
-
 
 const stripe  = new Stripe(process.env.STRIPE_SECRET_KEY)
 
