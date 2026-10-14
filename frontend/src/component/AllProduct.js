@@ -1,75 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CardFeature from "./CardFeature";
-import FilterProduct from "./FilterProduct";
 
-const AllProduct = ({ heading }) => {
+const AllProduct = ({ heading, initialCategory = "all", excludeId }) => {
   const productData = useSelector((state) => state.product.productList);
   const categoryList = [...new Set(productData.map((el) => el.category))];
-
-  //filter data display
-  const [filterby, setFilterBy] = useState("");
-  const [dataFilter, setDataFilter] = useState([]);
+  const [filterby, setFilterBy] = useState(initialCategory);
 
   useEffect(() => {
-    setDataFilter(productData);
-  }, [productData]);
+    setFilterBy(initialCategory);
+  }, [initialCategory]);
 
-  const handleFilterProduct = (category) => {
-    setFilterBy(category)
-    const filter = productData.filter(
-      (el) => el.category.toLowerCase() === category.toLowerCase()
-    );
-    setDataFilter(() => {
-      return [...filter];
-    });
-  };
-
-  const loadingArrayFeature = new Array(10).fill(null);
+  const shown = productData.filter(
+    (el) =>
+      el._id !== excludeId &&
+      (filterby === "all" || el.category?.toLowerCase() === filterby.toLowerCase())
+  );
 
   return (
-    <div className="my-5">
-      <h2 className="font-bold text-2xl text-slate-800 mb-4">{heading}</h2>
+    <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+      <h2 className="section-title mb-6">{heading}</h2>
 
-      <div className="flex gap-4 justify-center overflow-scroll scrollbar-none">
-        {categoryList[0] ? (
-          categoryList.map((el) => {
-            return (
-              <FilterProduct
-                category={el}
-                key={el}
-                isActive={el.toLowerCase() === filterby.toLowerCase()}
-                onClick={() => handleFilterProduct(el)}
-              />
-            );
-          })
-        ) : (
-          <div className="min-h-[150px] flex justify-center items-center">
-            <p>Loading...</p>
-          </div>
-        )}
+      <div className="no-scrollbar mb-8 flex gap-2 overflow-x-auto pb-1">
+        {["all", ...categoryList].map((c) => (
+          <button
+            key={c}
+            onClick={() => setFilterBy(c)}
+            className={`whitespace-nowrap rounded-full border px-5 py-2 text-sm font-semibold capitalize transition ${
+              filterby.toLowerCase() === c.toLowerCase()
+                ? "border-volt bg-volt text-ink"
+                : "border-edge text-zinc-300 hover:border-volt hover:text-volt"
+            }`}
+          >
+            {c === "all" ? "Todos" : c}
+          </button>
+        ))}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 my-4">
-        {dataFilter[0]
-          ? dataFilter.map((el) => {
-              return (
-                <CardFeature
-                  key={el._id}
-                  id={el._id}
-                  image={el.image}
-                  name={el.name}
-                  category={el.category}
-                  price={el.price}
-                />
-              );
-            })
-          : 
-          loadingArrayFeature.map((el,index) => (
-              <CardFeature loading="Loading..." key={index+"allProduct"} />
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
+        {productData.length === 0
+          ? new Array(8).fill(null).map((_, i) => <CardFeature key={i + "load"} loading="Cargando..." />)
+          : shown.map((el) => (
+              <CardFeature
+                key={el._id}
+                id={el._id}
+                image={el.image}
+                name={el.name}
+                category={el.category}
+                price={el.price}
+                description={el.description}
+              />
             ))}
       </div>
-    </div>
+    </section>
   );
 };
 

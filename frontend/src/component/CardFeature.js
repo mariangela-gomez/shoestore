@@ -1,54 +1,52 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { addCartItem} from "../redux/productSlide";
+import { HiOutlinePlus } from "react-icons/hi2";
+import { addCartItem } from "../redux/productSlide";
 
-const CardFeature = ({ image, name, price, category, loading, id }) => {
-  const dispatch = useDispatch()
+const CardFeature = ({ image, name, price, category, loading, id, description }) => {
+  const dispatch = useDispatch();
 
   const handleAddCartProduct = (e) => {
-    dispatch(addCartItem({
-      _id : id,
-      name : name,
-      price : price,
-      category : category,
-      image : image
-    }))
+    e.preventDefault();
+    dispatch(addCartItem({ _id: id, name, price, category, image, description }));
   };
 
+  if (!image) {
+    return (
+      <div className="aspect-[4/5] w-full animate-pulse rounded-3xl border border-edge bg-panel" title={loading} />
+    );
+  }
+
   return (
-    <div className="w-full min-w-[200px] max-w-[200px] bg-white hover:shadow-lg drop-shadow-lg py-5 px-4 cursor-pointer flex flex-col ">
-      {image ? (
-        <>
-          <Link
-            to={`/shoe/${id}`}
-            onClick={() => window.scrollTo({ top: "0", behavior: "smooth" })}
-          >
-            <div className="h-28 flex flex-col justify-center items-center">
-              <img src={image} className="h-full" alt="product img"/>
-            </div>
-            <h3 className="font-semibold text-slate-600  capitalize text-lg mt-4 whitespace-nowrap overflow-hidden">
-              {name}
-            </h3>
-            <p className=" text-slate-500  font-medium">{category}</p>
-            <p className=" font-bold">
-              <span className="text-red-500">$</span>
-              <span>{price}</span>
-            </p>
-          </Link>
-          <button
-            className="bg-slate-900 py-1 mt-2 rounded hover:bg-slate-600 w-full text-white text-bold"
-            onClick={handleAddCartProduct}
-          >
-            Add to Cart
-          </button>
-        </>
-      ) : (
-        <div className="min-h-[150px] flex justify-center items-center">
-          <p>{loading}</p>
+    <Link
+      to={`/shoe/${id}`}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className="group relative flex w-full flex-col overflow-hidden rounded-3xl border border-edge bg-panel transition duration-300 hover:-translate-y-1 hover:border-volt/60"
+    >
+      <div className="aspect-square overflow-hidden bg-zinc-900">
+        <img
+          src={image}
+          alt={name}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+        />
+      </div>
+      <div className="flex items-end justify-between gap-2 p-4">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-widest text-volt">{category}</p>
+          <h3 className="truncate font-display text-2xl font-bold uppercase leading-tight">{name}</h3>
+          <p className="mt-1 font-semibold text-zinc-300">${price}</p>
         </div>
-      )}
-    </div>
+        <button
+          onClick={handleAddCartProduct}
+          aria-label={`Agregar ${name} al carrito`}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-volt text-xl text-ink transition hover:brightness-110 active:scale-90"
+        >
+          <HiOutlinePlus />
+        </button>
+      </div>
+    </Link>
   );
 };
 
